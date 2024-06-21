@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+
+
+if ($argc < 2 || $argv[1] !== 'run') {
+    echo "Usage: php fuel run\n";
+    exit(1);
+}
+
+
+// Execute the command
+exec("php -S localhost:2323");
