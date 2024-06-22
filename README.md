@@ -1,5 +1,5 @@
 
-<p align="center"><img src="https://raw.githubusercontent.com/MRgrav/abhijaan/85514d5c957c320dbd18bf97673f7434425610cf/abhijaan_39.svg?token=AQDCMIH4QUC7G3VB3HRHGADGOZUDA" width="400" alt="অভিযান Logo"></p>
+<p align="center"><img src="https://github.com/MRgrav/public_files/blob/master/abhijaan_39.svg" width="400" alt="অভিযান Logo"></p>
 
 # About অভিযান (Abhijaan)
 
