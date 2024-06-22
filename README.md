@@ -1,5 +1,5 @@
 
-![অভিযান](https://github.com/MRgrav/abhijaan/assets/67511840/0d7888ec-e0fe-48ad-be33-b406dcf80f84)
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://github.com/MRgrav/abhijaan/assets/67511840/0d7888ec-e0fe-48ad-be33-b406dcf80f84" width="400" alt="অভিযান Logo"></a></p>
 
 # About অভিযান (Abhijaan)
 
