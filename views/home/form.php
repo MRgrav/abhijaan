@@ -2,4 +2,4 @@
 
 $name = $_POST['name'];
 
-echo $name;
+echo secure_data($name);

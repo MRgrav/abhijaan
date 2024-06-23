@@ -10,11 +10,88 @@ define('ROOT', __DIR__);
 
 define('FAVICON', __DIR__.'/public/favicon.ico');
 
-require_once '.core/inbuilts/session/session.php';
-require_once '.core/core.php';
+// config
 require_once 'config/config.php';
+// core files
+require_once '.core/core.php';
+// for user routes
 require_once 'routes/routes.php';
+// main header
 require_once 'public/index.php';
+
+define('DB_HOST', "localhost");
+define('DB_USER', "root");
+define('DB_PASS', "");
+define('DB_NAME', "grocDB");
+
+// Attempt to connect to the database
+// $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+// // Check connection
+// if (!$conn) {
+//     die("Connection failed: " . mysqli_connect_error());
+// } else {
+//     echo "done";
+// }
+
+$host = "localhost";
+$db = "postgres";
+$user = "postgres";
+$password = "postgres";
+$port = "5432";
+
+// $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=UTF8";
+
+// try {
+// 	$pdo = new PDO($dsn, $user, $password);
+
+// 	if ($pdo) {
+// 		echo "Connected to the $db database successfully!";
+// 	}
+// } catch (PDOException $e) {
+// 	echo $e->getMessage();
+// }
+
+
+try {
+	$dsn = "pgsql:host=$host;port=5432;dbname=$db;";
+	// make a database connection
+	$pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
+	if ($pdo) {
+		echo "Connected to the $db database successfully!";
+	}
+} catch (PDOException $e) {
+	die($e->getMessage());
+}
+// } finally {
+// 	if ($pdo) {
+// 		$pdo = null;
+// 	}
+// }
+
+$sql = 'SELECT scheme_code FROM schemes';
+
+$statement = $pdo->query($sql);
+
+// get all publishers
+$publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+// echo $publishers;
+
+if ($publishers) {
+	// show the publishers
+	foreach ($publishers as $publisher) {
+		echo $publisher['scheme_code'] . '<br>';
+	}
+}
+
+
+
+
+
+
+
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
