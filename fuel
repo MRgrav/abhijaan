@@ -6,10 +6,6 @@ if (PHP_SAPI !== 'cli') {
     exit('This script can only be run from the command line.');
 }
 
-// Basic command line interface
-// echo "Welcome to Abhijaan Framework CLI Tool\n";
-// echo "----------------------------------------\n\n";
-
 // Check command-line arguments
 if ($argc < 2) {
     help(); // Display help if no command is provided
@@ -55,13 +51,6 @@ function version() {
     exit(1);
 }
 
-
-                                                                                
-
-                                                                                
-
-
-
                                                                                 
 function cli_logo() {
     echo " \t\t\t\t\t    \033[1m\033[44m </> \033[0m\033[37m\033[1m";
@@ -75,3 +64,212 @@ function cli_logo() {
     echo "\033[0m\033[31m\033[6mABHIJAAN\033[0m Framework version \033[32m0.1.0\033[0m 2024\n\n";
 }
                            
+
+
+
+
+
+// file
+writeAuth();
+writeConnection();
+write404();
+writeRoute();
+writeSecure();
+writeSession();
+writeCore();
+writeConfig();
+writePublicIndex();
+writeRoutes();
+writeViewsIndex();
+writeIndex();
+
+//media
+copyLogoImage(); 
+
+// auth file
+function writeAuth() {
+// file creation
+mkdir($inbuiltPath.'/auth', 0777, true);
+$filename = $inbuiltPath.'/auth/auth.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+
+function set_auth(\$id = null, \$username = null) {
+    if (\$id && \$username) {
+        \$_SESSION['id'] = \$id;
+        \$_SESSION['name'] = \$username;
+    }
+}
+
+function get_user() {
+    if (isset(\$_SESSION['id']) && isset(\$_SESSION['name'])) {
+        return array(\$_SESSION['id'], \$_SESSION['name']);
+    }
+}
+
+function user_name() {
+    if (isset(\$_SESSION['name'])) {
+        return \$_SESSION['name'];
+    }
+}
+
+function user_id() {
+    if (isset(\$_SESSION['id'])) {
+        return \$_SESSION['id'];
+    }
+}
+
+function check_auth() {
+    if (isset(\$_SESSION['id']) && isset(\$_SESSION['name'])) {
+        return true;
+    }
+    return false;
+}
+
+function destroy_user() {
+    session_unset();
+    session_destroy();
+}
+CODE
+);
+chmod($filename, 0444);
+}
+
+
+// connection file
+function writeConnection() {
+// file creation
+mkdir($inbuiltPath.'/connection', 0777, true);
+$filename = $inbuiltPath.'/connection/connection.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+
+\$pdo;
+switch (DB) {
+    case "pgsql":
+        postgres(DB_HOST, DB_NAME, DB_USER, DB_PASS);
+        break;
+
+}
+
+function postgres(\$host, \$dbname, \$user, \$password) {
+    global \$pdo;
+    try {
+        \$dsn = "pgsql:host=\$host;port=5432;dbname=\$dbname;";
+        // make a database connection
+        \$pdo = new PDO(\$dsn, \$user, \$password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    
+        if (\$pdo) {
+            echo "Connected to the \$dbname database successfully!";
+        }
+    } catch (PDOException \$e) {
+        die(\$e->getMessage());
+    }
+}
+CODE
+);
+    chmod($filename, 0444);
+}
+
+// route file
+function writeRoute() {
+// file creation
+mkdir($inbuiltPath.'/routing', 0777, true);
+$filename = $inbuiltPath.'/routing/route.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+
+\$route = [
+	'/' => ROOT.'/views/index.php',
+];
+
+function route(\$uri = null, \$path= null) {
+	global \$route;
+	\$uri = secure_data(\$uri);
+	\$path = secure_data(\$path);
+
+	if (\$path && \$uri) {
+		if (isset(\$route[\$uri])) {
+			error_log("Path already assigned");
+		}
+		// asign
+		\$route[\$uri] = ROOT.'/views/'.\$path;
+	}
+	return \$route;
+}
+CODE );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function copyLogoImage() {
+    $url = 'https://github.com/MRgrav/public_files/blob/master/abhijaan_full_png_compresses_25.png';
+    $targetDir = 'public';
+
+    downloadFile($url, $targetDir);
+}
+
+
+
+// Function to download and save the file
+function downloadFile($sourceURL, $targetDir) {
+
+    // Get filename from the URL
+    $filename = basename($sourceURL);
+  
+    // Validate filename (optional)
+    if (!preg_match("/^[a-zA-Z0-9._-]+\.[a-zA-Z]+$/", $filename)) {
+      die("Invalid filename: $filename");
+    }
+  
+    // Check if target directory exists
+    if (!is_dir($targetDir)) {
+      mkdir($targetDir, 0755, true);  // Create directory if it doesn't exist with permissions
+    }
+  
+    // Create the full target path
+    $targetPath = "$targetDir/$filename";
+  
+    // Initialize cURL
+    $ch = curl_init();
+  
+    // Set cURL options
+    curl_setopt($ch, CURLOPT_URL, $sourceURL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  // Return the downloaded content
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // Follow redirects
+  
+    // Download the file
+    $content = curl_exec($ch);
+  
+    $error = curl_error($ch);
+    curl_close($ch);
+  
+    // Check for download errors
+    if ($error) {
+      die("Error downloading file: $error");
+    }
+  
+    // Save the downloaded content to the file
+    if (file_put_contents($targetPath, $content) === false) {
+      die("Error saving file: $targetPath");
+    }
+}
