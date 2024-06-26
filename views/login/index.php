@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Login successful! (start a session or redirect)
         session_start();
         $_SESSION["user_id"] = $user["id"];
-        header("Location: home.php");  // Redirect to a home page after login
+        header("Location: home");  // Redirect to a home page after login
       } else {
         $errorMessage = "Invalid email or password.";
       }
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p style="color: red;"><?php echo $errorMessage; ?></p>
   <?php endif; ?>
 
-  <form method="post" action="<?= $route['/login'] ?>">
+  <form method="post" action="/login">
     <label for="email">Email:</label>
     <input type="email" id="email" name="email"><br><br>
     <label for="password">Password:</label>

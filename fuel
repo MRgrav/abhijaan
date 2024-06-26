@@ -12,6 +12,8 @@ if ($argc < 2) {
 } else {
     $command = $argv[1];
 
+    $currentDir = getcwd();
+
     switch ($command) {
         case "help":
             help();
@@ -21,6 +23,9 @@ if ($argc < 2) {
             break;
         case "run":
             run();
+            break;
+        case "create-app":
+            createApp($currentDir);
             break;
         default:
             help();
@@ -51,6 +56,20 @@ function version() {
     exit(1);
 }
 
+// create project
+function createApp($currentDir) {
+    cli_logo();
+    try {
+        writeAuth($currentDir);
+    } catch (e) {}
+    try {
+        writeConnection($currentDir);
+    } catch (e) {}
+    try {
+        writePublicIndex($currentDir);
+    } catch (e) {}
+}
+
                                                                                 
 function cli_logo() {
     echo " \t\t\t\t\t    \033[1m\033[44m </> \033[0m\033[37m\033[1m";
@@ -70,29 +89,28 @@ function cli_logo() {
 
 
 // file
-writeAuth();
-writeConnection();
-write404();
-writeRoute();
-writeSecure();
-writeSession();
-writeCore();
-writeConfig();
-writePublicIndex();
-writeRoutes();
-writeViewsIndex();
-writeIndex();
+// writeAuth();
+// writeConnection();
+// write404();
+// writeRoute();
+// writeSecure();
+// writeSession();
+// writeCore();
+// writeConfig();
+// writePublicIndex();
+// writeRoutes();
+// writeViewsIndex();
+// writeIndex();
 
 //media
-copyLogoImage(); 
+// copyLogoImage(); 
 
-$inbuiltPath = '.core/inbuilts';
 
 // auth file
-function writeAuth() {
+function writeAuth($currentDir) {
 // file creation
-mkdir($inbuiltPath.'/auth', 0777, true);
-$filename = $inbuiltPath.'/auth/auth.php';
+mkdir($currentDir.'/'.'.core/inbuilts/auth', 0777, true);
+$filename = $currentDir.'/'.'.core/inbuilts/auth/auth.php';
 // file content
 file_put_contents($filename, 
 <<<CODE
@@ -140,10 +158,10 @@ chmod($filename, 0444);
 
 
 // connection file
-function writeConnection() {
+function writeConnection($currentDir) {
 // file creation
-mkdir($inbuiltPath.'/connection', 0777, true);
-$filename = $inbuiltPath.'/connection/connection.php';
+mkdir($currentDir.'/'.'.core/inbuilts/connection', 0777, true);
+$filename = $currentDir.'/'.'.core/inbuilts/connection/connection.php';
 // file content
 file_put_contents($filename, 
 <<<CODE
@@ -174,20 +192,18 @@ chmod($filename, 0444);
 }
 
 // route file
-function writeRoute() {
+function writeRoute($currentDir) {
 // file creation
-mkdir($inbuiltPath.'/routing', 0777, true);
-$filename = $inbuiltPath.'/routing/route.php';
+mkdir($currentDir.'/'.'.core/inbuilts/routing', 0777, true);
+$filename = $currentDir.'/'.'.core/inbuilts/routing/route.php';
 // file content
 file_put_contents($filename, 
 <<<CODE
 <?php
-
-\$route = [
-	'/' => ROOT.'/views/index.php',
-];
-
-function route(\$uri = null, \$path= null) {
+    \$route = [
+    	'/' => ROOT.'/views/index.php',
+    ];
+    function route(\$uri = null, \$path= null) {
 	global \$route;
 	\$uri = secure_data(\$uri);
 	\$path = secure_data(\$path);
@@ -202,13 +218,14 @@ function route(\$uri = null, \$path= null) {
 	return \$route;
 }
 CODE );
+chmod($filename, 0444);
 }
 
 // secure file
-function writeSecure() {
+function writeSecure($currentDir) {
 // file creation
-mkdir($inbuiltPath.'/secure', 0777, true);
-$filename = $inbuiltPath.'/secure/secure.php';
+mkdir($currentDir.'/'.'.core/inbuilts/secure', 0777, true);
+$filename = $currentDir.'/'.'.core/inbuilts/secure/secure.php';
 // file content
 file_put_contents($filename, 
 <<<CODE
@@ -234,45 +251,91 @@ file_put_contents($filename,
         return openssl_decrypt(\$encrypted, 'aes-256-cbc', \$key, 0, \$iv);
     }
 CODE );
+chmod($filename, 0444);
 }
 
 // secure file
-function writeCore() {
+function writeCore($currentDir) {
 // file creation
-mkdir('.core/secure', 0777, true);
-$filename = '.core/core.php';
+mkdir($currentDir.'/'.'.core', 0777, true);
+$filename = $currentDir.'/'.'.core/core.php';
 // file content
 file_put_contents($filename, 
 <<<CODE
 <?php
-// namespace Core; \n
-// secure
-require_once 'inbuilts/secure/secure.php'; \n
-// route
-require_once 'inbuilts/routing/route.php'; \n
-// connection
-require_once 'inbuilts/connection/connection.php'; \n
-// asset()
-function asset(\$path) {
-    return "/public/".\$path;
-}
+    // namespace Core; \n
+    // secure
+    require_once 'inbuilts/secure/secure.php'; \n
+    // route
+    require_once 'inbuilts/routing/route.php'; \n
+    // connection
+    require_once 'inbuilts/connection/connection.php'; \n
+    // asset()
+    function asset(\$path) {
+        return "/public/".\$path;
+    }
 CODE );
+chmod($filename, 0444);
+}
+
+// config
+function writeConfig($currentDir) {
+// file creation
+mkdir($currentDir.'/'.'config', 0777, true);
+$filename = $currentDir.'/'.'config/config.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+    // ./config/config.php
+
+    // Project Name
+    define('PROJECT_NAME','gemiPHP');
+
+    // Database configuration
+    define('DB_HOST', "localhost");
+    define('DB_USER', "postgres");
+    define('DB_PASS', "postgres");
+    define('DB_NAME', "abhijaan");
+
+    // for postgreSQL database, uncomment the below line
+    define('DB', 'pgsql');
+
+    // localhost server port
+    define('PORT', "2323");
+CODE );
+chmod($filename, 0444);
+}
+
+function writePublicIndex($currentDir) {
+// file creation
+mkdir($currentDir.'/'.'public', 0777, true);
+$filename = $currentDir.'/'.'public/index.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অভিযান</title>
+    <link rel="icon" href="<?= asset('favicon.ico') ?>">
+    <link rel="stylesheet" href="<?= asset('style.css') ?>">
+    <!-- Other meta tags, stylesheets, or scripts -->
+</head>
+<body>
+CODE );
+chmod($filename, 0444);
 }
 
 
 
 
 
-
-
-
-
-
-
-
-function copyLogoImage() {
+function copyLogoImage($currentDir) {
     $url = 'https://github.com/MRgrav/public_files/blob/master/abhijaan_full_png_compresses_25.png';
-    $targetDir = 'public';
+    $targetDir = $currentDir.'/'.'public';
 
     downloadFile($url, $targetDir);
 }

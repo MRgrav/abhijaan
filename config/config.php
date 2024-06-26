@@ -14,6 +14,5 @@ define('DB_NAME', "abhijaan");
 // for postgreSQL database, uncomment the below line
 define('DB', 'pgsql');
 
-
 // localhost server port
 define('PORT', "2323");

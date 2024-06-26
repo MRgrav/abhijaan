@@ -1,5 +1,158 @@
-* {
-    margin: 0;
-    padding: 0;
+:root {
+    --wh-bs: #fff; /* white */
+    --or-sp: #ff3a00; /* Orange */
+    --bl-sn: #0085ff; /* Blue */
+    --bl-sd: #00356663;
+    --or-sd: #68180063;
 }
 
+/* Reset margins and padding */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif; /* Choose your preferred font family */
+    height: 100vh;
+}
+
+.container, .container-lg, .container-fuid {
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 1rem 2rem; /* Add some padding for content */
+    height: 100%;
+}
+
+/* Box model properties */
+.container {
+  max-width: 1140px; /* Common container width */
+}
+
+.container-lg {
+    max-width: 1400px; /* Optional: Set a maximum width for large screens */
+}
+
+.container-fuid {
+    max-width: 100%; /* Optional: Set a maximum width for large screens */
+}
+
+.flex, .flex-row, .flex-col {
+  display: flex; /* Enable flexbox for rows */
+  flex-wrap: wrap; /* Allow elements to wrap on smaller screens */
+}
+
+.flex-nowrap {
+	flex-wrap: nowrap;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+/* Custom Flex Utility Classes */
+.flex-grow {
+    flex: 1 0 auto; /* Similar to default .col behavior */
+}
+  
+.flex-50 {
+    flex: 1 1 50%; /* Grow to fill available space, minimum and preferred size of 50% */
+}
+  
+.flex-25 {
+    flex: 1 1 25%; /* Grow to fill space, minimum and preferred size of 25% */
+}
+  
+.flex-75 {
+    flex: 1 1 75%; /* Grow to fill space, minimum and preferred size of 75% */
+}
+
+.justify-start {
+  	justify-content: flex-start; /* Align items to the start */
+}
+
+.justify-center {
+  	justify-content: center; /* Center items horizontally */
+}
+
+.justify-end {
+  	justify-content: flex-end; /* Align items to the end */
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-start {
+  	align-items: flex-start; /* Align items at the top */
+}
+
+.align-center {
+  	align-items: center; /* Vertically center items */
+}
+
+.align-end {
+  	align-items: flex-end; /* Align items at the bottom */
+}
+
+/* Sizing utilities */
+.w-full {
+  	width: 100%;
+}
+
+.w-50 {
+  	width: 50%;
+}
+
+.h-full {
+  	height: 100%;
+}
+
+.h-auto{
+    height: auto;
+}
+
+/* Shadow utility */
+.shadow {
+  	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Basic shadow effect */
+}
+
+.mx-auto {
+	margin-left: auto;
+	margin-right: auto;
+}
+  
+.my-auto {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.bg-white {
+    background-color: var(--wh-bs);
+}
+
+.blur {
+    backdrop-filter: blur(3px);
+}
+
+.blur-md {
+    backdrop-filter: blur(10px);
+}
+
+
+
+
+
+
+
+/* Media Queries for Responsiveness (Basic Example) */
+@media (max-width: 768px) {
+    .col {
+        flex: 100%; /* Make columns full width on small screens */
+    }
+
+    .container {
+        padding: 0.5rem; /* Adjust container padding on small screens */
+    }
+}
+  
