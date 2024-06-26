@@ -86,6 +86,8 @@ writeIndex();
 //media
 copyLogoImage(); 
 
+$inbuiltPath = '.core/inbuilts';
+
 // auth file
 function writeAuth() {
 // file creation
@@ -95,43 +97,42 @@ $filename = $inbuiltPath.'/auth/auth.php';
 file_put_contents($filename, 
 <<<CODE
 <?php
-
-function set_auth(\$id = null, \$username = null) {
-    if (\$id && \$username) {
-        \$_SESSION['id'] = \$id;
-        \$_SESSION['name'] = \$username;
+    function set_auth(\$id = null, \$username = null) {
+        if (\$id && \$username) {
+            \$_SESSION['id'] = \$id;
+            \$_SESSION['name'] = \$username;
+        }
     }
-}
-
-function get_user() {
-    if (isset(\$_SESSION['id']) && isset(\$_SESSION['name'])) {
-        return array(\$_SESSION['id'], \$_SESSION['name']);
+    // get logged in info
+    function get_user() {
+        if (isset(\$_SESSION['id']) && isset(\$_SESSION['name'])) {
+            return array(\$_SESSION['id'], \$_SESSION['name']);
+        }
     }
-}
-
-function user_name() {
-    if (isset(\$_SESSION['name'])) {
-        return \$_SESSION['name'];
+    // get logged in user name
+    function user_name() {
+        if (isset(\$_SESSION['name'])) {
+            return \$_SESSION['name'];
+        }
     }
-}
-
-function user_id() {
-    if (isset(\$_SESSION['id'])) {
-        return \$_SESSION['id'];
+    // get logged in user id
+    function user_id() {
+        if (isset(\$_SESSION['id'])) {
+            return \$_SESSION['id'];
+        }
     }
-}
-
-function check_auth() {
-    if (isset(\$_SESSION['id']) && isset(\$_SESSION['name'])) {
-        return true;
+    // check if logged in
+    function check_auth() {
+        if (isset(\$_SESSION['id']) && isset(\$_SESSION['name'])) {
+            return true;
+        }
+        return false;
     }
-    return false;
-}
-
-function destroy_user() {
-    session_unset();
-    session_destroy();
-}
+    // destroy session
+    function destroy_user() {
+        session_unset();
+        session_destroy();
+    }
 CODE
 );
 chmod($filename, 0444);
@@ -148,31 +149,28 @@ file_put_contents($filename,
 <<<CODE
 <?php
 
-\$pdo;
-switch (DB) {
-    case "pgsql":
-        postgres(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-        break;
-
-}
-
-function postgres(\$host, \$dbname, \$user, \$password) {
-    global \$pdo;
-    try {
-        \$dsn = "pgsql:host=\$host;port=5432;dbname=\$dbname;";
-        // make a database connection
-        \$pdo = new PDO(\$dsn, \$user, \$password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    
-        if (\$pdo) {
-            echo "Connected to the \$dbname database successfully!";
-        }
-    } catch (PDOException \$e) {
-        die(\$e->getMessage());
+    \$pdo;
+    switch (DB) {
+        case "pgsql":
+            postgres(DB_HOST, DB_NAME, DB_USER, DB_PASS);
+            break;
     }
-}
+    function postgres(\$host, \$dbname, \$user, \$password) {
+        global \$pdo;
+        try {
+            \$dsn = "pgsql:host=\$host;port=5432;dbname=\$dbname;";
+            // make a database connection
+            \$pdo = new PDO(\$dsn, \$user, \$password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+            if (\$pdo) {
+                echo "Connected to the \$dbname database successfully!";
+            }
+        } catch (PDOException \$e) {
+            die(\$e->getMessage());
+        }
+    }
 CODE
 );
-    chmod($filename, 0444);
+chmod($filename, 0444);
 }
 
 // route file
@@ -206,9 +204,60 @@ function route(\$uri = null, \$path= null) {
 CODE );
 }
 
+// secure file
+function writeSecure() {
+// file creation
+mkdir($inbuiltPath.'/secure', 0777, true);
+$filename = $inbuiltPath.'/secure/secure.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+    // secure data by filtering
+    function secure_data (\$data) {
+        \$data = trim(\$data);
+        \$data = stripslashes(\$data);
+        \$data = htmlspecialchars(\$data);
+        return \$data;
+    }
+    // Function to encrypt data
+    function encryptData(\$data, \$key) {
+        \$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        \$encrypted = openssl_encrypt(\$data, 'aes-256-cbc', \$key, 0, \$iv);
+        return base64_encode(\$encrypted . '::' . \$iv);
+    }
+    // Function to decrypt data
+    function decryptData(\$data, \$key) {
+        \$parts = explode('::', base64_decode(\$data));
+        \$encrypted = \$parts[0];
+        \$iv = \$parts[1];
+        return openssl_decrypt(\$encrypted, 'aes-256-cbc', \$key, 0, \$iv);
+    }
+CODE );
+}
 
-
-
+// secure file
+function writeCore() {
+// file creation
+mkdir('.core/secure', 0777, true);
+$filename = '.core/core.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+// namespace Core; \n
+// secure
+require_once 'inbuilts/secure/secure.php'; \n
+// route
+require_once 'inbuilts/routing/route.php'; \n
+// connection
+require_once 'inbuilts/connection/connection.php'; \n
+// asset()
+function asset(\$path) {
+    return "/public/".\$path;
+}
+CODE );
+}
 
 
 
@@ -232,42 +281,32 @@ function copyLogoImage() {
 
 // Function to download and save the file
 function downloadFile($sourceURL, $targetDir) {
-
     // Get filename from the URL
     $filename = basename($sourceURL);
-  
     // Validate filename (optional)
     if (!preg_match("/^[a-zA-Z0-9._-]+\.[a-zA-Z]+$/", $filename)) {
       die("Invalid filename: $filename");
     }
-  
     // Check if target directory exists
     if (!is_dir($targetDir)) {
       mkdir($targetDir, 0755, true);  // Create directory if it doesn't exist with permissions
     }
-  
     // Create the full target path
     $targetPath = "$targetDir/$filename";
-  
     // Initialize cURL
     $ch = curl_init();
-  
     // Set cURL options
     curl_setopt($ch, CURLOPT_URL, $sourceURL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  // Return the downloaded content
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // Follow redirects
-  
     // Download the file
     $content = curl_exec($ch);
-  
     $error = curl_error($ch);
     curl_close($ch);
-  
     // Check for download errors
     if ($error) {
       die("Error downloading file: $error");
     }
-  
     // Save the downloaded content to the file
     if (file_put_contents($targetPath, $content) === false) {
       die("Error saving file: $targetPath");
