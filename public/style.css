@@ -2,8 +2,22 @@
     --wh-bs: #fff; /* white */
     --or-sp: #ff3a00; /* Orange */
     --bl-sn: #0085ff; /* Blue */
-    --bl-sd: #00356663;
+    --bl-lt: #58B3F1;
+    --bl-sd: #006bf663;
+    --bl-dk: #006BF6;
     --or-sd: #68180063;
+    --gn-st: #00A000;
+    --gn-dk: #006A00;
+    --rd-st: #D90000;
+    --rd-sd: #d9000062;
+    --pn-st: #FFBDD1;
+    --gn-st: #BDA69F;
+    --bk-st: #000000;
+    --sd-dk: #0000008f;
+    --sd-lt: #00000036;
+    --ga-dk: #414141;
+    --ga-st: #7c7c7c;
+    --ga-lt: #9e9e9e;
 }
 
 /* Reset margins and padding */
@@ -51,20 +65,20 @@ html, body {
 }
 
 /* Custom Flex Utility Classes */
-.flex-grow {
+.flex-gnow {
     flex: 1 0 auto; /* Similar to default .col behavior */
 }
   
 .flex-50 {
-    flex: 1 1 50%; /* Grow to fill available space, minimum and preferred size of 50% */
+    flex: 1 1 50%; /* gnow to fill available space, minimum and preferred size of 50% */
 }
   
 .flex-25 {
-    flex: 1 1 25%; /* Grow to fill space, minimum and preferred size of 25% */
+    flex: 1 1 25%; /* gnow to fill space, minimum and preferred size of 25% */
 }
   
 .flex-75 {
-    flex: 1 1 75%; /* Grow to fill space, minimum and preferred size of 75% */
+    flex: 1 1 75%; /* gnow to fill space, minimum and preferred size of 75% */
 }
 
 .justify-start {
@@ -139,6 +153,302 @@ html, body {
     backdrop-filter: blur(10px);
 }
 
+/* Additional padding utility classes */
+.p-0 {
+    padding: 0;
+}
+
+.p-1 {
+    padding: 0.25rem;
+}
+
+.p-2 {
+    padding: 0.5rem;
+}
+
+.p-3 {
+    padding: 0.75rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.p-5 {
+    padding: 1.25rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+.p-8 {
+    padding: 2rem;
+}
+
+.p-10 {
+    padding: 2.5rem;
+}
+
+.p-12 {
+    padding: 3rem;
+}
+
+.p-16 {
+    padding: 4rem;
+}
+
+.p-20 {
+    padding: 5rem;
+}
+
+.p-24 {
+    padding: 6rem;
+}
+
+.p-32 {
+    padding: 8rem;
+}
+
+.p-40 {
+    padding: 10rem;
+}
+
+.p-48 {
+    padding: 12rem;
+}
+
+.p-56 {
+    padding: 14rem;
+}
+
+.p-64 {
+    padding: 16rem;
+}
+
+/* Additional margin utility classes */
+.m-0 {
+    margin: 0;
+}
+
+.m-1 {
+    margin: 0.25rem;
+}
+
+.m-2 {
+    margin: 0.5rem;
+}
+
+.m-3 {
+    margin: 0.75rem;
+}
+
+.m-4 {
+    margin: 1rem;
+}
+
+.m-5 {
+    margin: 1.25rem;
+}
+
+.m-6 {
+    margin: 1.5rem;
+}
+
+.m-8 {
+    margin: 2rem;
+}
+
+.m-10 {
+    margin: 2.5rem;
+}
+
+.m-12 {
+    margin: 3rem;
+}
+
+.m-16 {
+    margin: 4rem;
+}
+
+.m-20 {
+    margin: 5rem;
+}
+
+.m-24 {
+    margin: 6rem;
+}
+
+.m-32 {
+    margin: 8rem;
+}
+
+.m-40 {
+    margin: 10rem;
+}
+
+.m-48 {
+    margin: 12rem;
+}
+
+.m-56 {
+    margin: 14rem;
+}
+
+.m-64 {
+    margin: 16rem;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-xs {
+    font-size: 0.75rem; /* Adjust as needed */
+}
+
+.text-sm {
+    font-size: 0.875rem; /* Adjust as needed */
+}
+
+/* Add more font sizes as required */
+
+.font-thin {
+    font-weight: 100;
+}
+
+.font-normal {
+    font-weight: normal;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+/* Add additional font weights */
+
+.border {
+    border: 1px solid var(--ga-dk); /* Adjust color and width as needed */
+}
+
+.border-x {
+    border-left: 1px solid var(--ga-dk);
+    border-right: 1px solid var(--ga-dk);
+}
+.border-b {
+    border-bottom: 1px solid var(--ga-dk);
+}
+.border-t {
+    border-top: 1px solid var(--ga-dk);
+}
+
+
+/* Define other border styles and widths */
+
+/* Define colors based on :root variables */
+.text-white {
+    color: var(--wh-bs); /* White */
+}
+
+.text-orange {
+    color: var(--or-sp); /* Orange */
+}
+
+.text-blue {
+    color: var(--bl-sn); /* Blue */
+}
+
+.text-light-blue {
+    color: var(--bl-lt); /* Light Blue */
+}
+
+.text-shadowed-blue {
+    color: var(--bl-sd); /* Shadowed Blue */
+}
+
+.text-dark-blue {
+    color: var(--bl-dk); /* Dark Blue */
+}
+
+.text-shadowed-orange {
+    color: var(--or-sd); /* Shadowed Orange */
+}
+
+.text-gneen-light {
+    color: var(--gn-lt); /* Light gneen */
+}
+
+.text-gneen-dark {
+    color: var(--gn-dk); /* Dark gneen */
+}
+
+.text-red {
+    color: var(--rd-st); /* Red */
+}
+
+.text-shadowed-red {
+    color: var(--rd-sd);
+}
+
+/* Define background colors based on :root variables */
+.bg-white {
+    background-color: var(--wh-bs); /* White */
+}
+
+.bg-orange {
+    background-color: var(--or-sp); /* Orange */
+}
+
+.bg-blue {
+    background-color: var(--bl-sn); /* Blue */
+}
+
+.bg-light-blue {
+    background-color: var(--bl-lt); /* Light Blue */
+}
+
+.bg-shadowed-blue {
+    background-color: var(--bl-sd); /* Shadowed Blue */
+}
+
+.bg-dark-blue {
+    background-color: var(--bl-dk); /* Dark Blue */
+}
+
+.bg-shadowed-orange {
+    background-color: var(--or-sd); /* Shadowed Orange */
+}
+
+.bg-gneen-light {
+    background-color: var(--gn-lt); /* Light gneen */
+}
+
+.bg-gneen-dark {
+    background-color: var(--gn-dk); /* Dark gneen */
+}
+
+.bg-red {
+    background-color: var(--rd-st); /* Red */
+}
+
+.bg-shadowed-red {
+    background-color: var(--rd-sd); /* Shadowed Red */
+}
+
+
+
 
 
 
@@ -147,12 +457,11 @@ html, body {
 
 /* Media Queries for Responsiveness (Basic Example) */
 @media (max-width: 768px) {
-    .col {
-        flex: 100%; /* Make columns full width on small screens */
-    }
-
     .container {
         padding: 0.5rem; /* Adjust container padding on small screens */
     }
+
+    .flex {
+        flex-direction: column; /* Stack items vertically on small screens */
+    }
 }
-  

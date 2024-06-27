@@ -1,16 +1,8 @@
 <style>
-:root {
-    --wh-bs: #fff; /* white */
-    --or-sp: #ff3a00; /* Orange */
-    --bl-sn: #0085ff; /* Blue */
-    --bl-sd: #00356663;
-    --or-sd: #68180063;
-}
+
 .container-fluid {
-/* background: rgb(0,133,255);
-background: linear-gradient(153deg, rgba(0,133,255,1) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 60%, rgba(255,58,0,1) 100%); */
-background: rgb(0,133,255);
-background: linear-gradient(153deg, rgba(0,133,255,1) 0%, rgba(126,193,255,1) 12%, rgba(202,225,255,1) 34%, rgba(255,219,214,1) 72%, rgba(255,158,131,1) 89%, rgba(255,58,0,1) 100%);
+    background: rgb(0,133,255);
+    background: linear-gradient(153deg, rgba(0,133,255,1) 0%, rgba(126,193,255,1) 12%, rgba(202,225,255,1) 34%, rgba(255,219,214,1) 72%, rgba(255,158,131,1) 89%, rgba(255,58,0,1) 100%);
 }
 .heads {
     max-width: 900px; 
@@ -57,9 +49,6 @@ background: linear-gradient(153deg, rgba(0,133,255,1) 0%, rgba(126,193,255,1) 12
         <div>
             <img class="logo-abhijaan" src="<?= asset('abhijaan_full.png') ?>" alt="abhijaan logo" >
         </div>
-        <!-- <div>
-            <img src="<?= asset('sp_logo.png') ?>" alt="a" class="logo-b">
-        </div> -->
     </div>
     <div class="flex cards mx-auto w-full">
     </div>
@@ -72,7 +61,7 @@ background: linear-gradient(153deg, rgba(0,133,255,1) 0%, rgba(126,193,255,1) 12
         </div>
         <div class="w-50">
             <div class="bg-white">
-                <p class="cards-title">Examples</p>
+                <p class="cards-title">Style sheet</p>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, possimus magnam voluptatibus minus culpa labore.</p>
             </div>
         </div>
