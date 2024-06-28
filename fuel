@@ -66,8 +66,39 @@ function createApp($currentDir) {
         writeConnection($currentDir);
     } catch (e) {}
     try {
+        write404($currentDir);
+    } catch (e) {}
+    try {
+        writeRoute($currentDir);
+    } catch (e) {}
+    try {
+        writeSecure($currentDir);
+    } catch (e) {}
+    try {
+        writeCore($currentDir);
+    } catch (e) {}
+    try {
+        writeConfig($currentDir);
+    } catch (e) {}
+    try {
+        writeRoutes($currentDir);
+    } catch (e) {}
+    try {
         writePublicIndex($currentDir);
     } catch (e) {}
+    try {
+        writeViewsIndex($currentDir);
+    } catch (e) {}
+    try {
+        writeIndex($currentDir);
+    } catch (e) {}
+    try {
+        copyStylesheet($currentDir);
+    } catch (e) {}
+    try {
+        copyLogoImage($currentDir);
+    } catch (e) {}
+    echo "\nYour abhijaan project is ready.\nRun the project : \n\t\tphp fuel run\n\n";
 }
 
                                                                                 
@@ -104,6 +135,11 @@ function cli_logo() {
 
 //media
 // copyLogoImage(); 
+
+
+
+
+
 
 
 // auth file
@@ -179,13 +215,36 @@ file_put_contents($filename,
             \$dsn = "pgsql:host=\$host;port=5432;dbname=\$dbname;";
             // make a database connection
             \$pdo = new PDO(\$dsn, \$user, \$password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-            if (\$pdo) {
-                echo "Connected to the \$dbname database successfully!";
-            }
+            // if (\$pdo) {
+            //    echo "Connected to the \$dbname database successfully!";
+            // }
         } catch (PDOException \$e) {
             die(\$e->getMessage());
         }
     }
+CODE
+);
+chmod($filename, 0444);
+}
+
+// auth file
+function write404($currentDir) {
+// file creation
+mkdir($currentDir.'/'.'.core/inbuilts/errors', 0777, true);
+$filename = $currentDir.'/'.'.core/inbuilts/errors/404.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<div class="container bg-shadowed-orange h-full">
+    <div class="flex align-center justify-center h-full">
+        <div class="card rounded-lg shadow w-50 border border-red">
+                <h1 class="card-title text-center text-red text-bold">404 - Page Not Found</h1>
+                <p class="my-6 text-justify">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+                <a href="/" class="btn btn-primary mb-6 mx-auto">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>
 CODE
 );
 chmod($filename, 0444);
@@ -257,7 +316,7 @@ chmod($filename, 0444);
 // secure file
 function writeCore($currentDir) {
 // file creation
-mkdir($currentDir.'/'.'.core', 0777, true);
+// mkdir($currentDir.'/'.'.core', 0777, true);
 $filename = $currentDir.'/'.'.core/core.php';
 // file content
 file_put_contents($filename, 
@@ -294,9 +353,9 @@ file_put_contents($filename,
 
     // Database configuration
     define('DB_HOST', "localhost");
-    define('DB_USER', "postgres");
-    define('DB_PASS', "postgres");
-    define('DB_NAME', "abhijaan");
+    define('DB_USER', "");
+    define('DB_PASS', "");
+    define('DB_NAME', "");
 
     // for postgreSQL database, uncomment the below line
     define('DB', 'pgsql');
@@ -321,7 +380,7 @@ file_put_contents($filename,
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>অভিযান</title>
     <link rel="icon" href="<?= asset('favicon.ico') ?>">
-    <link rel="stylesheet" href="<?= asset('style.css') ?>">
+    <link rel="stylesheet" href="<?= asset('style.min.css') ?>">
     <!-- Other meta tags, stylesheets, or scripts -->
 </head>
 <body>
@@ -329,12 +388,156 @@ CODE );
 chmod($filename, 0444);
 }
 
+function writeRoutes($currentDir) {
+// file creation
+mkdir($currentDir.'/routes', 0777, true);
+$filename = $currentDir.'/routes/routes.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+    // ./routes/routes.php
 
+    route('/home', 'home/index.php');
+CODE );
+chmod($filename, 0444);
+}
 
+function writeViewsIndex($currentDir) {
+// file creation
+mkdir($currentDir.'/views', 0777, true);
+$filename = $currentDir.'/views/index.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<style>
 
+.container {
+    background: rgb(0,133,255);
+    background: linear-gradient(153deg, rgba(0,133,255,1) 0%, rgba(126,193,255,1) 12%, rgba(202,225,255,1) 34%, rgba(255,219,214,1) 72%, rgba(255,158,131,1) 89%, rgba(255,58,0,1) 100%);
+}
+.heads {
+    width: 90vw;
+    max-width: 900px; 
+    margin-bottom: 3rem;
+    background: rgba(255,255,255, 0.4);
+    padding: 2rem 0rem;
+}
+.logo-abhijaan {
+    width: 280px;
+    padding-right: 2rem;
+}
+.logo-b {
+    display: hidden;
+    width: 70px;
+}
+.cards {
+    max-width: 900px;
+}
+.cards > div > div {
+    padding: 1.5rem 2rem;
+    margin: 0.2rem;
+    height: max-content;
+}
+.cards > div > div:hover {
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+    border-radius: 0.3rem;
+}
+.footer {
+    padding: 1rem ;
+    letter-spacing: 1px;
+    color: #0085ff;
+    width: 90vw;
+    max-width: 900px;
+}
+</style>
+
+<div class="container h-full flex-col justify-center">
+    <div class="flex align-end justify-end mx-auto heads">
+        <div>
+            <img class="logo-abhijaan" src="<?= asset('abhijaan_full.png') ?>" alt="abhijaan logo" >
+        </div>
+    </div>
+    <div class="flex-row cards mx-auto w-full">
+        <div class="flex-50">
+            <div class="bg-white">
+                <p class="card-title text-orange cursor-pointer">Documentation</p>
+                <p class="text-gray">Good human readable documentation for beginners.</p>
+            </div>
+        </div>
+        <div class="flex-50">
+            <div class="bg-white">
+                <p class="card-title text-orange cursor-pointer">Style sheet</p>
+                <p class="text-gray">Style your project with inbuilt css classes.</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex cards justify-between mx-auto footer">
+        <div>
+            <small>copy &copy; 2024</small>
+        </div>
+        <div>
+            <small>abhijaan 0.1.0</small>
+        </div>
+    </div>
+</div>
+CODE );
+chmod($filename, 0444);
+}
+
+function writeIndex($currentDir) {
+// file creation
+// mkdir($currentDir.'/routes', 0777, true);
+$filename = $currentDir.'/index.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<?php
+
+    // ./index.php
+
+    // uncomment the below line when developing and debugging
+    ini_set('display_errors', 1);
+
+    // Define constants for paths
+    define('ROOT', __DIR__);
+
+    // config
+    require_once 'config/config.php';
+    // core files
+    require_once '.core/core.php';
+    // for user routes
+    require_once 'routes/routes.php';
+    // main header
+    require_once 'public/index.php';
+
+    \$uri = parse_url(\$_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+    if (isset(\$route[\$uri])) {
+      \$viewPath = \$route[\$uri];
+      if (file_exists(\$viewPath)) {
+        require_once \$viewPath;
+      } else {
+        // echo "4041 Not Found";
+    	require_once ROOT.'/.core/inbuilts/errors/404.php';
+      }
+    } else {
+      // route not found
+      require_once ROOT.'/.core/inbuilts/errors/404.php';
+    }
+CODE );
+chmod($filename, 0444);
+}
+
+function copyStylesheet($currentDir) {
+    $url = 'https://raw.githubusercontent.com/MRgrav/public_files/master/style.min.css';
+    $targetDir = $currentDir.'/'.'public';
+
+    downloadFile($url, $targetDir);
+}
 
 function copyLogoImage($currentDir) {
-    $url = 'https://github.com/MRgrav/public_files/blob/master/abhijaan_full_png_compresses_25.png';
+    $url = 'https://raw.githubusercontent.com/MRgrav/public_files/master/abhijaan_full.png';
     $targetDir = $currentDir.'/'.'public';
 
     downloadFile($url, $targetDir);
