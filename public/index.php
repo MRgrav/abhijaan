@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>অভিযান</title>
     <link rel="icon" href="<?= asset('favicon.ico') ?>">
-    <link rel="stylesheet" href="<?= asset('style.css') ?>">
+    <link rel="stylesheet" href="<?= asset('style.min.css') ?>">
     <!-- Other meta tags, stylesheets, or scripts -->
 </head>
 <body>

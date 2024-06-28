@@ -36,7 +36,7 @@ if ($argc < 2) {
 // Run function
 function run() {
     echo "Running your project at localhost:2323\n";
-    exec("php -S localhost:2323 -t .");
+    exec("php -S 127.0.0.1:2323 -t .");
 }
 
 // uses function
