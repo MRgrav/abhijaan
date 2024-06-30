@@ -12,23 +12,8 @@ define('ROOT', __DIR__);
 require_once 'config/config.php';
 // core files
 require_once '.core/core.php';
-// for user routes
-require_once 'routes/routes.php';
 // main header
 require_once 'public/index.php';
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-if (isset($route[$uri])) {
-  $viewPath = $route[$uri];
-  if (file_exists($viewPath)) {
-    require_once $viewPath;
-  } else {
-    // echo "4041 Not Found";
-	require_once ROOT.'/.core/inbuilts/errors/404.php';
-  }
-} else {
-  // route not found
-  require_once ROOT.'/.core/inbuilts/errors/404.php';
-}
-
+// redirects the routes
+require_once redirector();
