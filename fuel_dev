@@ -56,6 +56,28 @@ function version() {
     exit(1);
 }
 
+// gui db management (only mysql, mariadb, postgres ) since learning purpose only
+// // migration
+// // create table
+// function createTable ($tableName) {
+//     // will create a file for the table
+// }
+
+// // migrate-all
+// function migrateAll() {
+//     // will only run the up function once 
+// } 
+
+// // migrate-table
+// function migrateTable($tableName) {
+//     // only migrate specific table
+// }
+
+// // migrate-rollback
+// function migrateRollback() {
+
+// }
+
 // create project
 function createApp($currentDir) {
     cli_logo();

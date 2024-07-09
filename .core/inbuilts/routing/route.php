@@ -2,6 +2,9 @@
 
 $route = [
 	'/' => ROOT.'/views/index.php',
+	// ...
+	'/abhijaan/is-connected' => ROOT.'/.core/inbuilts/connection/connectionMessage.php',
+	'/abhijaan/my-tables' => ROOT.'/.core/inbuilts/database/views/index.php',
 ];
 
 function route($uri = null, $path= null) {
