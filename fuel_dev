@@ -12,6 +12,17 @@ if ($argc < 2) {
 } else {
     $command = $argv[1];
 
+    // $varc = $argv[2];
+    
+    if ($argv[2]) {
+        $port = $argv[2];
+    } else {
+        $port = "2323";
+    }
+    // echo $command .' - '. $port;
+
+    // exit(1);
+
     $currentDir = getcwd();
 
     switch ($command) {
@@ -22,10 +33,22 @@ if ($argc < 2) {
             version();
             break;
         case "run":
-            run();
+            run($port);
             break;
         case "create-app":
             createApp($currentDir);
+            break;
+        case "create-table":
+            createTable($argv[2]);
+            break;
+        case "create-all-table":
+            createAllTable();
+            break;
+        case "delete-table":
+            deleteTable($argv[2]);
+            break;
+        case "drop-table":
+            dropTable($argv[2]);
             break;
         default:
             help();
@@ -34,9 +57,9 @@ if ($argc < 2) {
 
 
 // Run function
-function run() {
-    echo "Running your project at localhost:2323\n";
-    exec("php -S 127.0.0.1:2323 -t .");
+function run($port) {
+    echo "Running your project at localhost:".$port."\n";
+    exec("php -S 127.0.0.1:".$port." -t .");
 }
 
 // uses function
@@ -57,28 +80,30 @@ function version() {
 }
 
 // gui db management (only mysql, mariadb, postgres ) since learning purpose only
-// // migration
-// // create table
-// function createTable ($tableName) {
-//     // will create a file for the table
-// }
+// migration
+// create single table
+function createTable ($tableName) {
+    // will create a file for the table
+    echo "Table $tableName created.";
+}
 
-// // migrate-all
-// function migrateAll() {
-//     // will only run the up function once 
-// } 
+// // create all table at once
+function createAllTable() {
+    // will only run the up function once 
+    echo "All tables created";
+} 
 
-// // migrate-table
-// function migrateTable($tableName) {
-//     // only migrate specific table
-// }
+// drop table
+function dropTable($tableName) {
+    echo "Table $tableName dropped.";
+}
 
-// // migrate-rollback
-// function migrateRollback() {
+// delete table
+function deleteTable($tableName) {
+    echo "table $tableName deleted.";
+}
 
-// }
-
-// create project
+// create project  //  cc = creation - type (connection/route/core) for core it is x
 function createApp($currentDir) {
     cli_logo();
     try {
@@ -87,6 +112,9 @@ function createApp($currentDir) {
     try {
         writeConnection($currentDir);
     } catch (e) { echo "\nError code(cc)\n:File creation failed. Database services will not work. Please try again."; }
+    try {
+        writeConnectionMessage($currentDir);
+    } catch (e) { }
     try {
         write404($currentDir);
     } catch (e) {}
@@ -119,6 +147,9 @@ function createApp($currentDir) {
     } catch (e) {}
     try {
         copyLogoImage($currentDir);
+    } catch (e) {}
+    try {
+        demoUsersTable($currentDir);
     } catch (e) {}
     echo "\nYour abhijaan project is ready.\nRun the project : \n\t\tphp fuel run\n\n";
 }
@@ -200,18 +231,51 @@ file_put_contents($filename,
 <<<CODE
 <?php
 
-    \$pdo;
+\$pdo;
+
+if (DB_HOST !== '' && DB_NAME !== '' && DB_USER !== '') {
     switch (DB) {
         case "pgsql":
             postgres(DB_HOST, DB_NAME, DB_USER, DB_PASS);
             break;
     }
-    function postgres(\$host, \$dbname, \$user, \$password) {
-        global \$pdo;
-        \$dsn = "pgsql:host=\$host;port=5432;dbname=\$dbname;";
-        // make a database connection
-        \$pdo = new PDO(\$dsn, \$user, \$password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    }
+}
+function postgres(\$host, \$dbname, \$user, \$password) {
+    global \$pdo;
+    \$dsn = "pgsql:host=\$host;port=5432;dbname=\$dbname;";
+    // make a database connection
+    \$pdo = new PDO(\$dsn, \$user, \$password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+}
+CODE
+);
+chmod($filename, 0444);
+}
+
+// is connected
+function writeConnectionMessage($currentDir) {
+// file creation
+mkdir($currentDir.'/'.'.core/inbuilts/connection', 0777, true);
+$filename = $currentDir.'/'.'.core/inbuilts/connection/connectionMessage.php';
+// file content
+file_put_contents($filename, 
+<<<CODE
+<div class="container bg-gray h-full">
+    <div class="flex align-center justify-center h-full">
+        <div class="card rounded-lg shadow w-50 border border-blue">
+                <h1 class="card-title text-center text-blue">Connection Page</h1>
+                <?php if (\$pdo) { ?>
+                <p class="my-6 text-center">
+                    Your project is connected to the <b><?= DB ?></b> database.
+                </p>
+                <?php } else { ?>
+                <p class="my-6 text-center">
+                    Your project is not connected to any database. Please check config file.
+                </p>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>
 CODE
 );
 chmod($filename, 0444);
@@ -251,6 +315,8 @@ file_put_contents($filename,
 <?php
     \$route = [
     	'/' => ROOT.'/views/index.php',
+        // ...
+	    '/abhijaan/is-connected' => ROOT.'/.core/inbuilts/connection/connectionMessage.php',
     ];
     function route(\$uri = null, \$path= null) {
 	global \$route;
@@ -544,6 +610,23 @@ file_put_contents($filename,
 
 CODE );
 chmod($filename, 0444);
+}
+
+function demoUsersTable($currentDir){
+// file creation
+mkdir($currentDir.'/tables', 0777, true);
+$filename = $currentDir.'/tables/users.tbl';
+// file content
+file_put_contents($filename, 
+<<<CODE
+table: users
+columns:
+    id: INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY
+    username: VARCHAR(100) NOT NULL
+    email: VARCHAR(255) NOT NULL
+    created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    # Add more columns as needed
+CODE );
 }
 
 function copyStylesheet($currentDir) {

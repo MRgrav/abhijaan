@@ -5,6 +5,8 @@ $route = [
 	// ...
 	'/abhijaan/is-connected' => ROOT.'/.core/inbuilts/connection/connectionMessage.php',
 	'/abhijaan/my-tables' => ROOT.'/.core/inbuilts/database/views/index.php',
+	'/abhijaan/my-tables/GET' => ROOT.'/.core/inbuilts/database/views/index.php',
+	'/abhijaan/my-tables-test' => ROOT.'/.core/inbuilts/database/views/test.php',
 ];
 
 function route($uri = null, $path= null) {

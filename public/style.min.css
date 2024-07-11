@@ -4,8 +4,8 @@ html, body { margin: 0 !important; padding: 0 !important; font-family: sans-seri
 .container, .container-sm, .container-md, .container-lg { margin: 0 auto !important; max-height: 100% !important; max-width: 100% !important; }
 .container-sm { max-width: 640px !important; } .container-md { max-width: 1024px !important; } .container-lg { max-width: 1536px !important; }
 /* flex */
-.flex, .flex-row, .flex-col { display: flex !important; flex-wrap: wrap !important; } .flex-wrap-reverse { flex-wrap: wrap-reverse !important; } .flex-nowrap { flex-wrap: nowrap !important; } .flex-row { flex-direction: row !important; } .flex-col { flex-direction: column !important; }
-.flex-grow { flex: 1 0 auto !important; } .flex-20 { flex: 1 1 20% !important; } .flex-25 { flex: 1 1 25% !important; } .flex-50 { flex: 1 1 50% !important; } .flex-75 { flex: 1 1 75% !important; }
+.flex, .flex-row, .flex-col { display: flex !important; flex-wrap: unset !important; width: 100% !important; } .flex-wrap-reverse { flex-wrap: wrap-reverse !important; } .flex-nowrap { flex-wrap: nowrap !important; } .flex-row { flex-direction: row !important; } .flex-col { flex-direction: column !important; }
+.flex-grow { flex: 1 0 auto !important; } .flex-20 { flex: 0 1 20% !important; } .flex-25 { flex: 0 1 25% !important; } .flex-50 { flex: 0 1 50% !important; } .flex-75 { flex: 0 1 75% !important; }
 .justify-start { justify-content: flex-start !important; } .justify-center { justify-content: center !important; } .justify-end { justify-content: flex-end !important; } .justify-between { justify-content: space-between !important; } .align-start { align-items: flex-start !important; } .align-center { align-items: center !important; } .align-end { align-items: flex-end !important; }
 /* width height */
 .w-full { width: 100% !important; } .w-75 { width: 75% !important; } .w-50 { width: 50% !important; } .w-25 { width: 75% !important; } .w-auto { width: auto !important; } .h-full { height: 100% !important; } .h-75 { height: 75% !important; } .h-50 { height: 50% !important; } .h-25 { height: 25% !important; } .h-auto{ height: auto !important; }
