@@ -2,15 +2,15 @@
 
 function createTable ($tableName) {
     $file = ROOT.'/tables/'.$tableName.'.tbl';
+    $fileContent = file_get_contents($file);
+    createHandler($fileContent);
 }
 
 function createAllTable() {
     // Define directory containing table definitions
     $directory = ROOT.'/tables/';
-
     // Scan directory for custom format files (e.g., .tbl)
     $files = glob($directory . '*.tbl');
-
     foreach ($files as $file) {
         // Read file contents
         $fileContent = file_get_contents($file);
@@ -21,7 +21,7 @@ function createAllTable() {
 }
 
 function createHandler($fileContent) {
-
+    global $pdo; 
     // Parse custom format (example parsing logic)
     $lines = explode("\n", $fileContent);
     $tableDefinition = [
@@ -39,7 +39,6 @@ function createHandler($fileContent) {
         list($key, $value) = explode(':', $line, 2);
         $key = trim($key);
         $value = trim($value);
-        
         if ($key === 'table') {
             $tableDefinition['table'] = $value;
         } elseif ($key === 'columns') {
@@ -63,16 +62,26 @@ function createHandler($fileContent) {
     $sql .= implode(", ", $sqlColumns);
     $sql .= ");";
     
-    $pdo->exec($sql);
-    echo "\nTable '$tableName' created successfully!";
-    // Output or execute SQL statement (depending on your needs)
-    // echo $sql . "\n";
+    // $pdo->exec($sql);
+    // echo "\nTable '$tableName' created successfully!";
+    try {
+        $pdo->execute($sql);
+        echo "\nTable '$tableName' created successful!";
+    } catch (PDOException $e) {
+        echo "\nError executing SQL: " . $e->getMessage();
+    }
 }
 
 function dropTable($tableName) {
-    $sql = "DROP TABLE $tableName";
-    $pdo->exec($sql);
-    echo "\nTable '$tableName' created successfully!";
+    global $pdo; 
+    // Example of prepared statement
+    try {
+        $stmt = $pdo->prepare("DROP TABLE $tableName");
+        $stmt->execute();
+        echo "\nTable '$tableName' droppeed successful!";
+    } catch (PDOException $e) {
+        echo "\nError executing SQL: " . $e->getMessage();
+    }
 }
 
 function deleteTable($tableName) {

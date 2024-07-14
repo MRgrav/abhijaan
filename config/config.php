@@ -8,8 +8,8 @@ define('PROJECT_NAME','gemiPHP');
 // Database configuration
 define('DB_HOST', "localhost");
 define('DB_USER', "postgres");
-define('DB_PASS', "postgres");
-define('DB_NAME', "abhijaan");
+define('DB_PASS', "");
+define('DB_NAME', "testAbhijaan");
 
 // for postgreSQL database, uncomment the below line
 define('DB', 'pgsql');

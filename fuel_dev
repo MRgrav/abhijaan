@@ -82,26 +82,26 @@ function version() {
 // gui db management (only mysql, mariadb, postgres ) since learning purpose only
 // migration
 // create single table
-function createTable ($tableName) {
-    // will create a file for the table
-    echo "Table $tableName created.";
-}
+// function createTable ($tableName) {
+//     // will create a file for the table
+//     echo "Table $tableName created.";
+// }
 
-// // create all table at once
-function createAllTable() {
-    // will only run the up function once 
-    echo "All tables created";
-} 
+// // // create all table at once
+// function createAllTable() {
+//     // will only run the up function once 
+//     echo "All tables created";
+// } 
 
-// drop table
-function dropTable($tableName) {
-    echo "Table $tableName dropped.";
-}
+// // drop table
+// function dropTable($tableName) {
+//     echo "Table $tableName dropped.";
+// }
 
-// delete table
-function deleteTable($tableName) {
-    echo "table $tableName deleted.";
-}
+// // delete table
+// function deleteTable($tableName) {
+//     echo "table $tableName deleted.";
+// }
 
 // create project  //  cc = creation - type (connection/route/core) for core it is x
 function createApp($currentDir) {
@@ -168,7 +168,118 @@ function cli_logo() {
     echo "\033[0m\033[31m\033[6mABHIJAAN\033[0m Framework version \033[32m0.1.0\033[0m 2024\n\n";
 }
 
+/*  *********************
+    *  part table query *
+    *********************
+*/
 
+function createTable ($tableName) {
+    $file = 'tables/'.$tableName.'.tbl';
+    $fileContent = file_get_contents($file);
+    createHandler($fileContent);
+}
+
+function createAllTable() {
+    // Define directory containing table definitions
+    $directory = 'tables/';
+    // Scan directory for custom format files (e.g., .tbl)
+    $files = glob($directory . '*.tbl');
+    foreach ($files as $file) {
+        // Read file contents
+        $fileContent = file_get_contents($file);
+        // Create tables
+        createHandler($fileContent);
+    }
+
+}
+
+function createHandler($fileContent) {
+    require_once "./config/config.php";
+    require_once "./.core/inbuilts/connection/connection.php";
+    global $pdo; 
+    // Parse custom format (example parsing logic)
+    $lines = explode("\n", $fileContent);
+    $tableDefinition = [
+        'table' => '',
+        'columns' => []
+    ];
+
+    // foreach ($lines as $line) {
+    //     echo trim($line)."\n";
+    // }
+    // exit(1);
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if (empty($line) || strpos($line, '#') === 0) {
+            continue; // Skip empty lines or comments (lines starting with #)
+        }
+
+        // Parse key-value pairs
+        list($key, $value) = explode(':', $line, 2);
+        $key = trim($key);
+        $value = trim($value);
+        // echo $key === "table";
+        // echo $value;
+        // exit(1);
+        if ($key === 'table') {
+            $tableDefinition['table'] = $value;
+
+        } elseif ($key === 'columns') {
+            // Parse columns section 
+        } else {
+            // while (($line = trim(next($lines))) !== 'end') {
+                list($column, $datatype) = explode(':', $line, 2);
+                $tableDefinition['columns'][$column] = $datatype;
+            // }
+        }
+    }
+
+    // Generate CREATE TABLE SQL statement
+    $tableName = $tableDefinition['table'];
+    $columns = $tableDefinition['columns'];
+
+    $sql = "CREATE TABLE IF NOT EXISTS $tableName ( ";
+    $sqlColumns = [];
+    foreach ($columns as $column => $datatype) {
+        $sqlColumns[] = "$column $datatype";
+    }
+    $sql .= implode(", ", $sqlColumns);
+    $sql .= " );";
+
+    // echo $sql;
+    // exit(1);
+    
+    // $pdo->exec($sql);
+    // echo "\nTable '$tableName' created successfully!";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        echo "\nTable '$tableName' created successful!";
+    } catch (PDOException $e) {
+        echo "\nError executing SQL: " . $e->getMessage();
+    }
+}
+
+function dropTable($tableName) {
+    require_once "./config/config.php";
+    require_once "./.core/inbuilts/connection/connection.php";
+    global $pdo; 
+    // Example of prepared statement
+    try {
+        $stmt = $pdo->prepare("DROP TABLE $tableName");
+        $stmt->execute();
+        echo "\nTable '$tableName' droppeed successful!";
+    } catch (PDOException $e) {
+        echo "\nError executing SQL: " . $e->getMessage();
+    }
+}
+
+
+/*  *********************
+    *  part file write  *
+    *********************
+*/
 
 // auth file
 function writeAuth($currentDir) {
