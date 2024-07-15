@@ -1,0 +1,13 @@
+{
+    "table": "users",
+    "columns": {
+        "id": "SERIAL PRIMARY KEY",
+        "username": "VARCHAR(100) NOT NULL",
+        "email": "VARCHAR(255) NOT NULL",
+        "address": "INT NOT NULL",
+        "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    },
+    "references": {
+        "address": "addresses(id)"
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "// table": "table name",
+    "// columns": {
+        "// column name": "column properties"
+    },
+    "// references": {
+        "// column name": "table name(id)"
+    }
+}

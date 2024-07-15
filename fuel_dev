@@ -44,7 +44,7 @@ if ($argc < 2) {
         case "create-all-table":
             createAllTable();
             break;
-        case "delete-table":
+        case "truncate-table":
             deleteTable($argv[2]);
             break;
         case "drop-table":
@@ -172,18 +172,18 @@ function cli_logo() {
     *  part table query *
     *********************
 */
-
+// create a single table
 function createTable ($tableName) {
-    $file = 'tables/'.$tableName.'.tbl';
+    $file = 'tables/'.$tableName.'.tbl.json';
     $fileContent = file_get_contents($file);
     createHandler($fileContent);
 }
-
+// create all table at once
 function createAllTable() {
     // Define directory containing table definitions
     $directory = 'tables/';
     // Scan directory for custom format files (e.g., .tbl)
-    $files = glob($directory . '*.tbl');
+    $files = glob($directory . '*.tbl.json');
     foreach ($files as $file) {
         // Read file contents
         $fileContent = file_get_contents($file);
@@ -192,75 +192,59 @@ function createAllTable() {
     }
 
 }
-
+// create handler
 function createHandler($fileContent) {
     require_once "./config/config.php";
     require_once "./.core/inbuilts/connection/connection.php";
-    global $pdo; 
-    // Parse custom format (example parsing logic)
-    $lines = explode("\n", $fileContent);
-    $tableDefinition = [
-        'table' => '',
-        'columns' => []
-    ];
+    global $pdo;
 
-    // foreach ($lines as $line) {
-    //     echo trim($line)."\n";
-    // }
-    // exit(1);
+    // Parse JSON format (assuming the file contains JSON data)
+    $schema = json_decode($fileContent, true);
 
-    foreach ($lines as $line) {
-        $line = trim($line);
-        if (empty($line) || strpos($line, '#') === 0) {
-            continue; // Skip empty lines or comments (lines starting with #)
-        }
-
-        // Parse key-value pairs
-        list($key, $value) = explode(':', $line, 2);
-        $key = trim($key);
-        $value = trim($value);
-        // echo $key === "table";
-        // echo $value;
-        // exit(1);
-        if ($key === 'table') {
-            $tableDefinition['table'] = $value;
-
-        } elseif ($key === 'columns') {
-            // Parse columns section 
-        } else {
-            // while (($line = trim(next($lines))) !== 'end') {
-                list($column, $datatype) = explode(':', $line, 2);
-                $tableDefinition['columns'][$column] = $datatype;
-            // }
-        }
+    if (!$schema) {
+        echo "Error parsing schema file.\n";
+        return;
     }
 
-    // Generate CREATE TABLE SQL statement
-    $tableName = $tableDefinition['table'];
-    $columns = $tableDefinition['columns'];
+    // Extract table name and column definitions
+    $tableName = isset($schema['table']) ? $schema['table'] : '';
+    $columns = isset($schema['columns']) ? $schema['columns'] : [];
+    $foreignKeys = isset($schema['references']) ? $schema['references'] : [];
 
-    $sql = "CREATE TABLE IF NOT EXISTS $tableName ( ";
+    // Validate required parameters
+    if (empty($tableName) || empty($columns)) {
+        echo "Table name or columns missing in schema.\n";
+        return;
+    }
+
+    // Generate SQL for columns
     $sqlColumns = [];
     foreach ($columns as $column => $datatype) {
         $sqlColumns[] = "$column $datatype";
     }
-    $sql .= implode(", ", $sqlColumns);
-    $sql .= " );";
 
-    // echo $sql;
-    // exit(1);
-    
-    // $pdo->exec($sql);
-    // echo "\nTable '$tableName' created successfully!";
+    // Generate SQL for foreign keys
+    $sqlForeignKeys = [];
+    foreach ($foreignKeys as $column => $reference) {
+        $sqlForeignKeys[] = "FOREIGN KEY ($column) REFERENCES $reference";
+    }
+
+    // Construct the CREATE TABLE SQL statement
+    $sql = "CREATE TABLE IF NOT EXISTS $tableName (";
+    $sql .= implode(", ", $sqlColumns);
+    if (!empty($sqlForeignKeys)) {
+        $sql .= ", " . implode(", ", $sqlForeignKeys);
+    }
+    $sql .= ");";
+
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        echo "\nTable '$tableName' created successful!";
+        echo "\nTable $tableName created successfully!";
     } catch (PDOException $e) {
         echo "\nError executing SQL: " . $e->getMessage();
     }
 }
-
 function dropTable($tableName) {
     require_once "./config/config.php";
     require_once "./.core/inbuilts/connection/connection.php";
@@ -269,12 +253,25 @@ function dropTable($tableName) {
     try {
         $stmt = $pdo->prepare("DROP TABLE $tableName");
         $stmt->execute();
-        echo "\nTable '$tableName' droppeed successful!";
+        echo "\nTable $tableName droppeed successful!";
     } catch (PDOException $e) {
         echo "\nError executing SQL: " . $e->getMessage();
     }
 }
 
+function truncateTable($tableName) {
+    require_once "./config/config.php";
+    require_once "./.core/inbuilts/connection/connection.php";
+    global $pdo; 
+    // Example of prepared statement
+    try {
+        $stmt = $pdo->prepare("TRUNCATE TABLE $tableName");
+        $stmt->execute();
+        echo "\nTable $tableName truncated successful!";
+    } catch (PDOException $e) {
+        echo "\nError executing SQL: " . $e->getMessage();
+    }
+}
 
 /*  *********************
     *  part file write  *
