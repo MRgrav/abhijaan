@@ -11,17 +11,12 @@ if ($argc < 2) {
     help(); // Display help if no command is provided
 } else {
     $command = $argv[1];
-
-    // $varc = $argv[2];
     
     if ($argv[2]) {
         $port = $argv[2];
     } else {
         $port = "2323";
     }
-    // echo $command .' - '. $port;
-
-    // exit(1);
 
     $currentDir = getcwd();
 
@@ -67,9 +62,15 @@ function help() {
     cli_logo();
     echo "\033[33musage:\033[32m php fuel\033[0m <--command-->\n\n";
     echo "\033[33mcommands:\033[0m\n";
-    echo "\t\033[32mrun:\033[0m\t\trun your project at localhost (default port:2323)\n";
-    echo "\t\033[32mhelp:\033[0m\t\thelp\n";
-    echo "\t\033[32mversion:\033[0m\tversion\n";
+    echo "\t\033[32mrun\033[0m\t\t\t run your project at localhost (default port:2323)\n";
+    echo "\t\033[32mcreate-app .\033[0m\t\t create your project inside the current directory\n";
+    echo "\t\033[32mcreate-table \033[33m(name)\033[0m\t create your project inside the current directory\n";
+    echo "\t\033[32mcreate-all-table \033[33m(name)\033[0m\t create your project inside the current directory\n";
+    echo "\t\033[32mtruncate-table \033[33m(name)\033[0m\t create your project inside the current directory\n";
+    echo "\t\033[32mdrop-table \033[33m(name)\033[0m\t create your project inside the current directory\n";
+    echo "\t\033[32mversion\033[0m\t\t\t version\n";
+    echo "\t\033[32mhelp\033[0m\t\t\t help\n";
+    echo "\n\033[33moptions:\033[0m\n";
     exit(1);
 }
 
@@ -78,30 +79,6 @@ function version() {
     cli_logo();
     exit(1);
 }
-
-// gui db management (only mysql, mariadb, postgres ) since learning purpose only
-// migration
-// create single table
-// function createTable ($tableName) {
-//     // will create a file for the table
-//     echo "Table $tableName created.";
-// }
-
-// // // create all table at once
-// function createAllTable() {
-//     // will only run the up function once 
-//     echo "All tables created";
-// } 
-
-// // drop table
-// function dropTable($tableName) {
-//     echo "Table $tableName dropped.";
-// }
-
-// // delete table
-// function deleteTable($tableName) {
-//     echo "table $tableName deleted.";
-// }
 
 // create project  //  cc = creation - type (connection/route/core) for core it is x
 function createApp($currentDir) {
